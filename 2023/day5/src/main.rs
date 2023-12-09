@@ -179,7 +179,10 @@ fn part3(fname: &str) {
                                             .collect::<Vec<(usize, usize)>>();
 
 
-    seed_pairs.par_iter().for_each(|&(seed, length)| {
+    seed_pairs
+        .par_iter()
+        .enumerate()
+        .for_each(|(thread_id, &(seed, length))| {
             let mut step = 0;
             let mut lowest_location = std::usize::MAX;
 
@@ -187,7 +190,7 @@ fn part3(fname: &str) {
                 let curr_location = almanac.get_destination(i);
                 if curr_location < lowest_location {
                     lowest_location = curr_location;
-                    println!("seed {}, location {}", i, lowest_location);
+                    println!("thread {:2}) seed {:10}, location {:10}, range length {}M", thread_id, i, lowest_location, length / 1_000_000);
                 }
             }
         }
