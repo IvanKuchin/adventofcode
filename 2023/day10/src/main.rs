@@ -271,7 +271,7 @@ fn part2(fname: &str) {
     let max_steps = visited.values().max().unwrap();
     println!("Max distance: {}", max_steps);
 
-    println!("Visited: {:?}", visited);
+    // println!("Visited: {:?}", visited);
     // --------------------------
 
     let mut visited_lines = visited
@@ -284,7 +284,7 @@ fn part2(fname: &str) {
                                                     )
                                                     .collect::<Vec<_>>();
     visited_lines.sort();
-    println!("Visited lines: {:?}", visited_lines);
+    // println!("Visited lines: {:?}", visited_lines);
 
     let mut inside_tiles = 0;
     let mut direction = 0;
