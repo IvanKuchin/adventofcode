@@ -297,15 +297,14 @@ fn part2(fname: &str) {
             curr_tile_step = max_steps + 1;
         }
         let below_tile_step = visited.get(&format!("{}:{}", visited_lines[i][0] + 1, visited_lines[i][1]));
-        if let None = below_tile_step {
-            continue;
-        }
-        let below_tile_step = below_tile_step.unwrap();
+        if below_tile_step.is_some() {
+            let below_tile_step = below_tile_step.unwrap();
 
-        let modulo = curr_tile_step - below_tile_step;
+            let modulo = curr_tile_step - below_tile_step;
 
-        if modulo.abs() == 1 {
-            direction += modulo;
+            if modulo.abs() == 1 {
+                direction += modulo;
+            }
         }
 
         if direction != 0 {
