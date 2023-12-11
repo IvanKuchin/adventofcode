@@ -50,7 +50,7 @@ fn part1(input: &str) {
     // println!("columns to expand {:?}", expand_cols);
     // println!("galaxies {:?}", galaxies);
 
-    let galaxies_pairs = galaxies.iter().copied().combinations(2).unique().collect::<Vec<_>>();
+    let galaxies_pairs = galaxies.iter().copied().combinations(2).collect::<Vec<_>>();
 
     let mut sum = 0;
     for (idx, pair) in galaxies_pairs.iter().enumerate() {
@@ -60,12 +60,13 @@ fn part1(input: &str) {
         let row_range = (cmp::min(g1.0, g2.0) as usize .. cmp::max(g1.0, g2.0) as usize).collect::<HashSet<_>>();
         let col_range = (cmp::min(g1.1, g2.1) as usize .. cmp::max(g1.1, g2.1) as usize).collect::<HashSet<_>>();
 
-        let row_intersection = expand_rows.intersection(&row_range).collect::<Vec<_>>();
-        let col_intersection = expand_cols.intersection(&col_range).collect::<Vec<_>>();
+        let row_intersection = expand_rows.intersection(&row_range);
+        let col_intersection = expand_cols.intersection(&col_range);
 
         // print!("g1 {:?} g2 {:?} : {} + {} + {} ", g1, g2, dist, row_intersection.len(), col_intersection.len());
 
-        dist += (row_intersection.len() as i64 + col_intersection.len() as i64) * (1_000_000-1);
+        // dist += (row_intersection.len() as i64 + col_intersection.len() as i64) * (2-1); // part1 
+        dist += (row_intersection.count() as i64 + col_intersection.count() as i64) * (1_000_000-1); // part2
 
         // println!(" = {}", dist);
         
