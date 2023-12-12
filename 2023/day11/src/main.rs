@@ -66,7 +66,7 @@ fn part1(input: &str) {
         // print!("g1 {:?} g2 {:?} : {} + {} + {} ", g1, g2, dist, row_intersection.len(), col_intersection.len());
 
         // dist += (row_intersection.len() as i64 + col_intersection.len() as i64) * (2-1); // part1 
-        dist += (row_intersection.count() as i64 + col_intersection.count() as i64) * (1_000_000-1); // part2
+        dist += (row_intersection.count() as i64 + col_intersection.count() as i64) * (7-1); // part2
 
         // println!(" = {}", dist);
         
@@ -78,5 +78,5 @@ fn part1(input: &str) {
                             
 
 fn main() {
-    part1("data/input.prod");
+    part1("data/input.dev");
 }
