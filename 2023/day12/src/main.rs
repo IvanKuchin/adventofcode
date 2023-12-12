@@ -65,61 +65,53 @@ fn part1(fname: &str) {
 impl Cache
 {
 
-    fn dynamic_programming(&mut self, springs: &str, numbers: &[usize], group_length: i32) -> usize {
-        if numbers.len() == 0 && group_length == -1 {
+    fn dynamic_programming(&mut self, springs: &str, numbers: &[usize], group_length: Option<usize>) -> usize {
+        if numbers.len() == 0 && group_length.is_none() {
             let any_springs_left = springs.find("#").is_some();
 
             return if any_springs_left { 0 } else { 1 };
         }
 
         if springs.is_empty() {
-            if group_length > 0 {
-                return 0;
-            } else {
-                if numbers.is_empty() {
-                    // println!("Found a match: springs {:?}, numbers {:?}", springs, numbers);
-                    return 1;
-                } else {
-                    return 0;
-                }
+            match group_length {
+                Some(0) | None => if numbers.is_empty() { return 1 } else { return 0 },
+                Some(_) => return 0,
             }
         }
 
         match (&springs[0..1], group_length) {
-            (".", -1) => return self.cached_dynamic_programming(&springs[1..], numbers, -1),
-            (".", 0) => return self.cached_dynamic_programming(&springs[1..], numbers, -1),
-            (".", _) => return 0,
+            (".", None) => return self.cached_dynamic_programming(&springs[1..], numbers, None),
+            (".", Some(0)) => return self.cached_dynamic_programming(&springs[1..], numbers, None),
+            (".", Some(_)) => return 0,
 
 
-            ("?", -1) => return self.cached_dynamic_programming(&springs[1..], numbers, -1) + self.cached_dynamic_programming(springs, &numbers[1..], numbers[0] as i32),
-            ("?", 0) => return self.cached_dynamic_programming(&springs[1..], numbers, -1),
-            ("?", _) => return self.cached_dynamic_programming(&springs[1..], numbers, group_length - 1),
+            ("?", None) => return self.cached_dynamic_programming(&springs[1..], numbers, None) + self.cached_dynamic_programming(springs, &numbers[1..], Some(numbers[0])),
+            ("?", Some(0)) => return self.cached_dynamic_programming(&springs[1..], numbers, None),
+            ("?", Some(v)) => return self.cached_dynamic_programming(&springs[1..], numbers, Some(v - 1)),
 
-            ("#", -1) => return self.cached_dynamic_programming(springs, &numbers[1..], numbers[0] as i32),
-            ("#", 0) => return 0,
-            ("#", _) => return self.cached_dynamic_programming(&springs[1..], numbers, group_length - 1),
+            ("#", None) => return self.cached_dynamic_programming(springs, &numbers[1..], Some(numbers[0])),
+            ("#", Some(0)) => return 0,
+            ("#", Some(v)) => return self.cached_dynamic_programming(&springs[1..], numbers, Some(v - 1)),
 
             (_, _) => unimplemented!("Not implemented yet"),
         }
-
     }
 
-    fn cached_dynamic_programming(&mut self, springs: &str, numbers: &[usize], group_length: i32) -> usize {
+    fn cached_dynamic_programming(&mut self, springs: &str, numbers: &[usize], group_length: Option<usize>) -> usize {
         if self.cache.contains_key(&(springs.to_string(), numbers.to_vec(), group_length)) {
             return *self.cache.get(&(springs.to_string(), numbers.to_vec(), group_length)).unwrap();
         }
         
         let result = self.dynamic_programming(springs, numbers, group_length);
         self.cache.insert((springs.to_string(), numbers.to_vec(), group_length), result);
-        
+
         return result;
     }
 }
 
 struct Cache {
-    cache: HashMap<(String, Vec<usize>, i32), usize>,
+    cache: HashMap<(String, Vec<usize>, Option<usize>), usize>,
 }
-
 
 
 fn part2(fname:&str) {
@@ -139,7 +131,7 @@ fn part2(fname:&str) {
 
         // println!("{}: {:?}", spring_map, numbers);
 
-        let combinations = cache.dynamic_programming(&spring_map, &numbers, -1);
+        let combinations = cache.dynamic_programming(&spring_map, &numbers, None);
 
         sum += combinations;
         println!("{:4}\tcombinations: {}, sum {}", i, combinations, sum);
