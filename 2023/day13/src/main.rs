@@ -1,6 +1,5 @@
 use std::cmp;
 
-// make a function that counts number of diffeeent symbols between two strings
 fn count_diff(s1: &str, s2: &str) -> usize {
     let mut count = 0;
     for (c1, c2) in s1.chars().zip(s2.chars()) {
