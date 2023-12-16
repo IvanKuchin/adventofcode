@@ -33,11 +33,15 @@ fn bfs(maze: HashMap<Pos, char>, start: Pos, start_dir: Dir) -> usize {
             let new_dir = Dir(dir.1, dir.0);
             queue.push_back((Pos(pos.0 + new_dir.0, pos.1 + new_dir.1), new_dir));
         } else if curr_cell == '|' && (dir == E || dir == W) {
-            queue.push_back((Pos(pos.0 + 1, pos.1), Dir(1, 0)));
-            queue.push_back((Pos(pos.0 - 1, pos.1), Dir(-1, 0)));
+            let new_dir = Dir(1, 0);
+            queue.push_back((Pos(pos.0 + new_dir.0, pos.1 + new_dir.1), new_dir));
+            let new_dir = Dir(-1, 0);
+            queue.push_back((Pos(pos.0 + new_dir.0, pos.1 + new_dir.1), new_dir));
         } else if curr_cell == '-' && (dir == N || dir == S) {
-            queue.push_back((Pos(pos.0, pos.1 + 1), Dir(0, 1)));
-            queue.push_back((Pos(pos.0, pos.1 - 1), Dir(0, -1)));
+            let new_dir = Dir(0, 1);
+            queue.push_back((Pos(pos.0 + new_dir.0, pos.1 + new_dir.1), new_dir));
+            let new_dir = Dir(0, -1);
+            queue.push_back((Pos(pos.0 + new_dir.0, pos.1 + new_dir.1), new_dir));
         } else {
             queue.push_back((Pos(pos.0 + dir.0, pos.1 + dir.1), dir));
         }
@@ -95,6 +99,6 @@ fn part2(_filename: &str) -> usize {
 }
 
 fn main() {
-    // println!("Part1 {}", part1("data/prod"));
+    println!("Part1 {}", part1("data/prod"));
     println!("Part2 {}", part2("data/prod"));
 }
